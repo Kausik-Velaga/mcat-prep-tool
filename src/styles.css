@@ -525,7 +525,7 @@ h2 {
   display: inline;
   border: 1px solid transparent;
   border-radius: 4px;
-  padding: 2px 3px;
+  padding: 1px 1px;
   background: transparent;
   color: var(--ink);
   cursor: pointer;

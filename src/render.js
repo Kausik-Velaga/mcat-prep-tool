@@ -7,7 +7,7 @@ function renderPassage(container, exercise, selectedSentenceIndex, answerSentenc
       const paragraph = document.createElement("p");
       paragraph.className = "passage-paragraph";
 
-      sentenceIndexes.forEach((index) => {
+      sentenceIndexes.forEach((index, position) => {
         const sentenceNode = document.createElement("span");
         sentenceNode.className = "sentence";
         sentenceNode.dataset.sentenceIndex = String(index);
@@ -23,7 +23,11 @@ function renderPassage(container, exercise, selectedSentenceIndex, answerSentenc
           sentenceNode.classList.add("is-answer");
       }
 
-        paragraph.append(sentenceNode, " ");
+        if (position > 0) {
+          paragraph.append(" ");
+        }
+
+        paragraph.append(sentenceNode);
       });
 
       return paragraph;
