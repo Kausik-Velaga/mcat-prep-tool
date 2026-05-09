@@ -425,6 +425,69 @@ a {
   color: var(--warning);
 }
 
+.account-workspace {
+  grid-template-columns: minmax(280px, 0.8fr) minmax(360px, 1.1fr);
+}
+
+.account-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.auth-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.auth-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.auth-form input {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0 12px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  font: inherit;
+}
+
+.auth-form input:focus {
+  border-color: var(--accent);
+  outline: 2px solid rgba(8, 126, 164, 0.18);
+}
+
+.compact-button {
+  min-height: 38px;
+  padding: 0 14px;
+}
+
+.account-message {
+  min-height: 48px;
+}
+
+.account-message.is-neutral {
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--muted);
+}
+
+.info-panel code {
+  border-radius: 4px;
+  background: var(--surface-strong);
+  color: var(--navy);
+  padding: 1px 4px;
+  font-size: 0.9em;
+}
+
 .topbar,
 .workspace {
   display: grid;

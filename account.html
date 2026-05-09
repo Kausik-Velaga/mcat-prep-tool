@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account | CARS Sentence Finder</title>
+    <link rel="stylesheet" href="./src/styles.css?v=8" />
+  </head>
+  <body>
+    <main class="site-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand" href="./index.html">Sentence Finder</a>
+        <div class="nav-links">
+          <a href="./library.html">Library</a>
+          <a href="./add.html">Add Content</a>
+          <a href="./practice.html">Practice</a>
+          <a href="./account.html" aria-current="page">Account</a>
+        </div>
+      </nav>
+
+      <section class="page-heading">
+        <p class="eyebrow">User Account</p>
+        <h1>Sign in to sync progress.</h1>
+        <p>Accounts are powered by Supabase Auth once the project URL and anon key are configured.</p>
+      </section>
+
+      <section class="content-workspace account-workspace">
+        <article id="authSetup" class="info-panel">
+          <h2>Supabase Setup</h2>
+          <p>Add your Supabase project URL and public anon key to <code>config/supabase-config.js</code>, then run the SQL in <code>supabase/schema.sql</code> inside the Supabase SQL editor.</p>
+          <p>The app will continue using local progress until that configuration is present.</p>
+        </article>
+
+        <article id="authCard" class="info-panel" hidden>
+          <div class="account-heading">
+            <div>
+              <p id="accountStatus" class="eyebrow">Signed out</p>
+              <h2 id="accountEmail">Use your email and password to continue.</h2>
+            </div>
+            <button id="signOutButton" class="secondary-button compact-button" type="button" hidden>Sign Out</button>
+          </div>
+
+          <div id="authForm" class="auth-form">
+            <label>
+              <span>Email</span>
+              <input id="email" type="email" autocomplete="email" />
+            </label>
+            <label>
+              <span>Password</span>
+              <input id="password" type="password" autocomplete="current-password" />
+            </label>
+            <div class="actions">
+              <button id="signInButton" class="primary-button" type="button">Sign In</button>
+              <button id="signUpButton" class="secondary-button" type="button">Create Account</button>
+            </div>
+          </div>
+
+          <div id="authMessage" class="template-preview account-message" aria-live="polite"></div>
+        </article>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./config/supabase-config.js?v=1"></script>
+    <script src="./src/supabase-client.js?v=1"></script>
+    <script src="./src/account.js?v=1"></script>
+  </body>
+</html>

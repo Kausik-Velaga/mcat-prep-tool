@@ -4,8 +4,13 @@
   const store = window.CARS_EXERCISE_STORE;
   const exercises = store?.exercises || [];
   let activeFilter = "all";
+  let cloudProgressByExerciseId = {};
 
   function getSavedProgress(exercise) {
+    if (Object.prototype.hasOwnProperty.call(cloudProgressByExerciseId, exercise.id)) {
+      return cloudProgressByExerciseId[exercise.id];
+    }
+
     try {
       const savedProgress = JSON.parse(localStorage.getItem(`cars-progress:${exercise.id}`) || "{}");
       const answeredQuestionIds = Array.isArray(savedProgress.answeredQuestionIds) ? savedProgress.answeredQuestionIds : [];
@@ -151,4 +156,9 @@
   });
 
   renderLibrary();
+
+  window.CARS_CLOUD_PROGRESS?.getAllProgress().then((progressByExerciseId) => {
+    cloudProgressByExerciseId = progressByExerciseId;
+    renderLibrary();
+  });
 })();

@@ -31,7 +31,7 @@ const elements = {
 const session = createSession(exercise.questions.length);
 const progressKey = `cars-progress:${exercise.id}`;
 
-function loadProgress() {
+function readLocalProgress() {
   try {
     const savedProgress = JSON.parse(localStorage.getItem(progressKey) || "{}");
     return {
@@ -46,19 +46,32 @@ function loadProgress() {
   }
 }
 
-function saveProgress() {
-  localStorage.setItem(
-    progressKey,
-    JSON.stringify({
-      answeredQuestionIds: Array.from(session.answeredQuestionIds),
-      correctQuestionIds: Array.from(session.correctQuestionIds)
-    })
-  );
+function currentProgress() {
+  return {
+    answeredQuestionIds: Array.from(session.answeredQuestionIds),
+    correctQuestionIds: Array.from(session.correctQuestionIds)
+  };
 }
 
-const savedProgress = loadProgress();
-savedProgress.answeredQuestionIds.forEach((questionId) => session.answeredQuestionIds.add(questionId));
-savedProgress.correctQuestionIds.forEach((questionId) => session.correctQuestionIds.add(questionId));
+function applyProgress(progress) {
+  session.answeredQuestionIds.clear();
+  session.correctQuestionIds.clear();
+  progress.answeredQuestionIds.forEach((questionId) => session.answeredQuestionIds.add(questionId));
+  progress.correctQuestionIds.forEach((questionId) => session.correctQuestionIds.add(questionId));
+}
+
+function saveProgress() {
+  const progress = currentProgress();
+
+  localStorage.setItem(
+    progressKey,
+    JSON.stringify(progress)
+  );
+
+  window.CARS_CLOUD_PROGRESS?.saveProgress(exercise.id, progress);
+}
+
+applyProgress(readLocalProgress());
 
 function currentQuestion() {
   return exercise.questions[session.currentQuestionIndex];
@@ -126,4 +139,13 @@ elements.nextButton.addEventListener("click", handleNextQuestion);
 elements.clearSelectionButton.addEventListener("click", handleClearSelection);
 
 rerender();
+
+window.CARS_CLOUD_PROGRESS?.getProgress(exercise.id).then((cloudProgress) => {
+  if (!cloudProgress) {
+    return;
+  }
+
+  applyProgress(cloudProgress);
+  rerender();
+});
 })();
