@@ -57,6 +57,7 @@ function renderQuestion(elements, exercise, session) {
   elements.scoreText.textContent = `${session.correctQuestionIds.size} correct`;
   elements.selectedSentence.textContent = selectedSentence ?? "Click a sentence in the passage.";
   elements.selectedSentence.classList.toggle("is-empty", selectedSentence === undefined);
+  elements.clearSelectionButton.disabled = selectedSentence === undefined;
   elements.feedback.replaceChildren();
 }
 
