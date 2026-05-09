@@ -5,7 +5,7 @@ const exercise =
   exerciseStore?.exercises.find((candidate) => candidate.id === requestedExerciseId) ||
   exerciseStore?.exercises.find((candidate) => candidate.id === exerciseStore.activeExerciseId) ||
   exerciseStore?.exercises[0];
-const { clearSelection, createSession, moveToNextQuestion, recordAnswer, selectSentence } = window.CARS_STATE;
+const { clearSelection, createSession, moveToNextQuestion, recordAnswer, selectSentence, setFeedback } = window.CARS_STATE;
 const { renderFeedback, renderPassage, renderQuestion } = window.CARS_RENDER;
 
 if (!exercise) {
@@ -21,6 +21,8 @@ const elements = {
   questionType: document.querySelector("#questionType"),
   progressText: document.querySelector("#progressText"),
   scoreText: document.querySelector("#scoreText"),
+  timerText: document.querySelector("#timerText"),
+  attemptsText: document.querySelector("#attemptsText"),
   selectedSentence: document.querySelector("#selectedSentence"),
   feedback: document.querySelector("#feedback"),
   checkButton: document.querySelector("#checkButton"),
@@ -30,6 +32,10 @@ const elements = {
 
 const session = createSession(exercise.questions.length);
 const progressKey = `cars-progress:${exercise.id}`;
+const statsKey = `cars-stats:${exercise.id}`;
+let stats = window.CARS_STATS.normalizeStats(readLocalStats());
+let sessionStartedAt = Date.now();
+let lastPersistedElapsedSeconds = 0;
 
 function readLocalProgress() {
   try {
@@ -46,10 +52,19 @@ function readLocalProgress() {
   }
 }
 
+function readLocalStats() {
+  try {
+    return JSON.parse(localStorage.getItem(statsKey) || "{}");
+  } catch (error) {
+    return window.CARS_STATS.emptyStats();
+  }
+}
+
 function currentProgress() {
   return {
     answeredQuestionIds: Array.from(session.answeredQuestionIds),
-    correctQuestionIds: Array.from(session.correctQuestionIds)
+    correctQuestionIds: Array.from(session.correctQuestionIds),
+    stats
   };
 }
 
@@ -58,6 +73,7 @@ function applyProgress(progress) {
   session.correctQuestionIds.clear();
   progress.answeredQuestionIds.forEach((questionId) => session.answeredQuestionIds.add(questionId));
   progress.correctQuestionIds.forEach((questionId) => session.correctQuestionIds.add(questionId));
+  stats = window.CARS_STATS.normalizeStats(progress.stats ?? stats);
 }
 
 function saveProgress() {
@@ -68,6 +84,7 @@ function saveProgress() {
     JSON.stringify(progress)
   );
 
+  localStorage.setItem(statsKey, JSON.stringify(stats));
   window.CARS_CLOUD_PROGRESS?.saveProgress(exercise.id, progress);
 }
 
@@ -77,9 +94,35 @@ function currentQuestion() {
   return exercise.questions[session.currentQuestionIndex];
 }
 
+function elapsedSeconds() {
+  return Math.floor((Date.now() - sessionStartedAt) / 1000);
+}
+
+function totalTrackedTimeSeconds() {
+  return stats.totalTimeSeconds + elapsedSeconds() - lastPersistedElapsedSeconds;
+}
+
+function persistElapsedTime() {
+  const currentElapsedSeconds = elapsedSeconds();
+  const newElapsedSeconds = currentElapsedSeconds - lastPersistedElapsedSeconds;
+
+  if (newElapsedSeconds <= 0) {
+    return;
+  }
+
+  window.CARS_STATS.addTime(stats, newElapsedSeconds);
+  lastPersistedElapsedSeconds = currentElapsedSeconds;
+}
+
+function renderStats() {
+  elements.timerText.textContent = `Time ${window.CARS_STATS.formatElapsed(totalTrackedTimeSeconds())}`;
+  elements.attemptsText.textContent = `${window.CARS_STATS.totalAttempts(stats)} attempts · ${window.CARS_STATS.accuracy(stats)}%`;
+}
+
 function rerender(answerSentenceIndex = null) {
   renderQuestion(elements, exercise, session);
   renderPassage(elements.passageText, exercise, session.selectedSentenceIndex, answerSentenceIndex);
+  renderStats();
 }
 
 function handleSentenceClick(event) {
@@ -98,23 +141,37 @@ function handleCheckAnswer() {
   const question = currentQuestion();
 
   if (session.selectedSentenceIndex === null) {
-    renderFeedback(elements.feedback, {
+    setFeedback(session, {
       isCorrect: false,
       message: "Select the sentence that best answers the question before checking."
     });
+    rerender();
     return;
   }
 
   const isCorrect = session.selectedSentenceIndex === question.answerSentenceIndex;
-  recordAnswer(session, question, isCorrect);
+
+  if (!isCorrect) {
+    window.CARS_STATS.recordAttempt(stats, question.id, false);
+    persistElapsedTime();
+    setFeedback(session, {
+      isCorrect: false,
+      message: "Not quite. Choose another sentence and try again."
+    });
+    saveProgress();
+    rerender();
+    return;
+  }
+
+  window.CARS_STATS.recordAttempt(stats, question.id, true);
+  persistElapsedTime();
+  recordAnswer(session, question, true);
   saveProgress();
-  rerender(question.answerSentenceIndex);
-  renderFeedback(elements.feedback, {
-    isCorrect,
-    message: isCorrect
-      ? question.explanation
-      : `The best evidence is: "${exercise.sentences[question.answerSentenceIndex]}"`
+  setFeedback(session, {
+    isCorrect: true,
+    message: question.explanation
   });
+  rerender(question.answerSentenceIndex);
 }
 
 function handleNextQuestion() {
@@ -137,8 +194,13 @@ elements.passageText.addEventListener("keydown", (event) => {
 elements.checkButton.addEventListener("click", handleCheckAnswer);
 elements.nextButton.addEventListener("click", handleNextQuestion);
 elements.clearSelectionButton.addEventListener("click", handleClearSelection);
+window.addEventListener("beforeunload", () => {
+  persistElapsedTime();
+  localStorage.setItem(statsKey, JSON.stringify(stats));
+});
 
 rerender();
+const timerInterval = window.setInterval(renderStats, 1000);
 
 window.CARS_CLOUD_PROGRESS?.getProgress(exercise.id).then((cloudProgress) => {
   if (!cloudProgress) {

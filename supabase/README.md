@@ -25,6 +25,8 @@ Open the Supabase SQL editor and run `supabase/schema.sql`.
 
 That script creates `public.user_progress`, enables row level security, and adds policies so users can only read and write their own progress rows.
 
+If you already ran an older version of the script, run it again. It includes an `alter table ... add column if not exists` statement for the `stats` JSON column used by timers and attempt tracking.
+
 ## 3. Configure auth
 
 In Authentication > Providers, keep Email enabled.

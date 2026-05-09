@@ -3,9 +3,13 @@ create table if not exists public.user_progress (
   exercise_id text not null,
   answered_question_ids text[] not null default '{}',
   correct_question_ids text[] not null default '{}',
+  stats jsonb not null default '{}'::jsonb,
   updated_at timestamptz not null default now(),
   primary key (user_id, exercise_id)
 );
+
+alter table public.user_progress
+add column if not exists stats jsonb not null default '{}'::jsonb;
 
 alter table public.user_progress enable row level security;
 
