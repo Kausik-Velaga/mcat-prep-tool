@@ -58,7 +58,12 @@ function renderQuestion(elements, exercise, session) {
   elements.selectedSentence.textContent = selectedSentence ?? "Click a sentence in the passage.";
   elements.selectedSentence.classList.toggle("is-empty", selectedSentence === undefined);
   elements.clearSelectionButton.disabled = selectedSentence === undefined;
-  elements.feedback.replaceChildren();
+
+  if (session.feedbackResult) {
+    renderFeedback(elements.feedback, session.feedbackResult);
+  } else {
+    elements.feedback.replaceChildren();
+  }
 }
 
 function renderFeedback(container, result) {

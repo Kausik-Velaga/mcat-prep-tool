@@ -5,7 +5,7 @@ const exercise =
   exerciseStore?.exercises.find((candidate) => candidate.id === requestedExerciseId) ||
   exerciseStore?.exercises.find((candidate) => candidate.id === exerciseStore.activeExerciseId) ||
   exerciseStore?.exercises[0];
-const { clearSelection, createSession, moveToNextQuestion, recordAnswer, selectSentence } = window.CARS_STATE;
+const { clearSelection, createSession, moveToNextQuestion, recordAnswer, selectSentence, setFeedback } = window.CARS_STATE;
 const { renderFeedback, renderPassage, renderQuestion } = window.CARS_RENDER;
 
 if (!exercise) {
@@ -98,23 +98,32 @@ function handleCheckAnswer() {
   const question = currentQuestion();
 
   if (session.selectedSentenceIndex === null) {
-    renderFeedback(elements.feedback, {
+    setFeedback(session, {
       isCorrect: false,
       message: "Select the sentence that best answers the question before checking."
     });
+    rerender();
     return;
   }
 
   const isCorrect = session.selectedSentenceIndex === question.answerSentenceIndex;
-  recordAnswer(session, question, isCorrect);
+
+  if (!isCorrect) {
+    setFeedback(session, {
+      isCorrect: false,
+      message: "Not quite. Choose another sentence and try again."
+    });
+    rerender();
+    return;
+  }
+
+  recordAnswer(session, question, true);
   saveProgress();
-  rerender(question.answerSentenceIndex);
-  renderFeedback(elements.feedback, {
-    isCorrect,
-    message: isCorrect
-      ? question.explanation
-      : `The best evidence is: "${exercise.sentences[question.answerSentenceIndex]}"`
+  setFeedback(session, {
+    isCorrect: true,
+    message: question.explanation
   });
+  rerender(question.answerSentenceIndex);
 }
 
 function handleNextQuestion() {
