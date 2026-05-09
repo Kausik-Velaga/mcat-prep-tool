@@ -13,17 +13,20 @@
 
     try {
       const savedProgress = JSON.parse(localStorage.getItem(`cars-progress:${exercise.id}`) || "{}");
+      const savedStats = JSON.parse(localStorage.getItem(`cars-stats:${exercise.id}`) || "{}");
       const answeredQuestionIds = Array.isArray(savedProgress.answeredQuestionIds) ? savedProgress.answeredQuestionIds : [];
       const correctQuestionIds = Array.isArray(savedProgress.correctQuestionIds) ? savedProgress.correctQuestionIds : [];
 
       return {
         answeredQuestionIds,
-        correctQuestionIds
+        correctQuestionIds,
+        stats: window.CARS_STATS.normalizeStats(savedProgress.stats ?? savedStats)
       };
     } catch (error) {
       return {
         answeredQuestionIds: [],
-        correctQuestionIds: []
+        correctQuestionIds: [],
+        stats: window.CARS_STATS.emptyStats()
       };
     }
   }
@@ -34,12 +37,16 @@
     const totalCount = exercise.questions.length;
     const percent = totalCount === 0 ? 0 : Math.round((answeredCount / totalCount) * 100);
     const status = answeredCount === 0 ? "not-started" : answeredCount >= totalCount ? "finished" : "started";
+    const stats = window.CARS_STATS.normalizeStats(savedProgress.stats);
 
     return {
       answeredCount,
       correctCount: savedProgress.correctQuestionIds.length,
+      attempts: window.CARS_STATS.totalAttempts(stats),
+      accuracy: window.CARS_STATS.accuracy(stats),
       percent,
       status,
+      timeSpent: stats.totalTimeSeconds,
       totalCount
     };
   }
@@ -80,6 +87,20 @@
     return badge;
   }
 
+  function createStatsCell(progress) {
+    const wrapper = document.createElement("div");
+    const attempts = document.createElement("strong");
+    const time = document.createElement("span");
+
+    wrapper.className = "table-stats-cell";
+    attempts.textContent = progress.attempts === 0 ? "No attempts" : `${progress.accuracy}% accuracy`;
+    time.textContent = progress.attempts === 0
+      ? `Time ${window.CARS_STATS.formatElapsed(progress.timeSpent)}`
+      : `${progress.attempts} attempts · Time ${window.CARS_STATS.formatElapsed(progress.timeSpent)}`;
+    wrapper.append(attempts, time);
+    return wrapper;
+  }
+
   function renderLibrary() {
     if (!list) {
       return;
@@ -113,6 +134,7 @@
         <th scope="col">Questions</th>
         <th scope="col">Status</th>
         <th scope="col">Progress</th>
+        <th scope="col">Stats</th>
         <th scope="col">Action</th>
       </tr>
     `;
@@ -123,6 +145,7 @@
       const countCell = document.createElement("td");
       const statusCell = document.createElement("td");
       const progressCell = document.createElement("td");
+      const statsCell = document.createElement("td");
       const actionCell = document.createElement("td");
       const title = document.createElement("strong");
       const source = document.createElement("span");
@@ -135,11 +158,12 @@
       countCell.textContent = String(exercise.questions.length);
       statusCell.append(createStatusBadge(progress.status));
       progressCell.append(createProgressCell(progress));
+      statsCell.append(createStatsCell(progress));
       link.className = "secondary-link table-action";
       link.href = `./practice.html?exercise=${encodeURIComponent(exercise.id)}`;
       link.textContent = progress.status === "not-started" ? "Start" : "Continue";
       actionCell.append(link);
-      row.append(titleCell, countCell, statusCell, progressCell, actionCell);
+      row.append(titleCell, countCell, statusCell, progressCell, statsCell, actionCell);
       tbody.append(row);
     });
 

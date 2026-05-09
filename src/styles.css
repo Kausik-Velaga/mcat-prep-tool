@@ -383,6 +383,27 @@ a {
   min-width: 190px;
 }
 
+.table-stats-cell {
+  min-width: 140px;
+}
+
+.table-stats-cell strong,
+.table-stats-cell span {
+  display: block;
+}
+
+.table-stats-cell strong {
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.table-stats-cell span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
 .progress-label {
   margin-bottom: 7px;
   color: var(--muted);

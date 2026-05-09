@@ -14,6 +14,7 @@ const staticPaths = [
   "library.html",
   "practice.html",
   "src",
+  "supabase",
   "templates"
 ];
 
