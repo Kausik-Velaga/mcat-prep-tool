@@ -5,16 +5,19 @@ function createSession(questionCount) {
     selectedSentenceIndex: null,
     answeredQuestionIds: new Set(),
     correctQuestionIds: new Set(),
+    feedbackResult: null,
     questionCount
   };
 }
 
 function selectSentence(session, sentenceIndex) {
   session.selectedSentenceIndex = sentenceIndex;
+  session.feedbackResult = null;
 }
 
 function clearSelection(session) {
   session.selectedSentenceIndex = null;
+  session.feedbackResult = null;
 }
 
 function recordAnswer(session, question, isCorrect) {
@@ -30,6 +33,11 @@ function recordAnswer(session, question, isCorrect) {
 function moveToNextQuestion(session) {
   session.currentQuestionIndex = (session.currentQuestionIndex + 1) % session.questionCount;
   session.selectedSentenceIndex = null;
+  session.feedbackResult = null;
+}
+
+function setFeedback(session, result) {
+  session.feedbackResult = result;
 }
 
 window.CARS_STATE = {
@@ -37,6 +45,7 @@ window.CARS_STATE = {
   createSession,
   moveToNextQuestion,
   recordAnswer,
-  selectSentence
+  selectSentence,
+  setFeedback
 };
 })();
