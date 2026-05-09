@@ -1,0 +1,32 @@
+You are helping me format an original or properly licensed MCAT CARS-style passage and question set for a sentence-evidence practice app.
+
+Return only valid JSON that matches this schema:
+
+{
+  "id": "lowercase-dash-id",
+  "title": "Short title",
+  "source": "Original, public domain, Creative Commons, or used with permission",
+  "paragraphs": [[0, 1], [2, 3]],
+  "sentences": ["Sentence 0.", "Sentence 1.", "Sentence 2.", "Sentence 3."],
+  "questions": [
+    {
+      "id": "question-1",
+      "type": "Foundations | Detail | Structure | Inference | Main Idea",
+      "originalPrompt": "Original multiple-choice question stem",
+      "choices": ["A", "B", "C", "D"],
+      "correctChoiceIndex": 0,
+      "evidencePrompt": "Optional custom sentence-finding instruction; omit unless needed",
+      "answerSentenceIndex": 2,
+      "explanation": "Why this sentence is the best evidence."
+    }
+  ]
+}
+
+Rules:
+- Preserve paragraph breaks using the paragraphs array.
+- Split the passage into complete sentences.
+- Use zero-based indexes for paragraphs, choices, and answerSentenceIndex.
+- Every answerSentenceIndex must point to the single best evidence sentence.
+- Preserve the original multiple-choice question in originalPrompt.
+- Omit evidencePrompt unless a custom sentence-finding instruction is truly needed.
+- Do not include copyrighted text unless I explicitly provide permission to use it.

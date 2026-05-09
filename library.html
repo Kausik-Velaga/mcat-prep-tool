@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library | CARS Sentence Finder</title>
+    <link rel="stylesheet" href="./src/styles.css?v=6" />
+  </head>
+  <body>
+    <main class="site-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand" href="./index.html">Sentence Finder</a>
+        <div class="nav-links">
+          <a href="./library.html" aria-current="page">Library</a>
+          <a href="./add.html">Add Content</a>
+          <a href="./practice.html">Practice</a>
+        </div>
+      </nav>
+
+      <section class="page-heading">
+        <p class="eyebrow">Available Passages</p>
+        <h1>Exercise Library</h1>
+        <p>Browse the passage sets currently bundled with this static prototype.</p>
+      </section>
+
+      <section class="library-toolbar" aria-label="Library filters">
+        <div class="segmented-control" role="group" aria-label="Filter by progress">
+          <button class="filter-button is-active" type="button" data-filter="all">All</button>
+          <button class="filter-button" type="button" data-filter="not-started">Not Started</button>
+          <button class="filter-button" type="button" data-filter="started">Started</button>
+          <button class="filter-button" type="button" data-filter="finished">Finished</button>
+        </div>
+      </section>
+
+      <section id="libraryList" class="library-table-shell" aria-live="polite"></section>
+    </main>
+
+    <script src="./data/exercise-store.js?v=2"></script>
+    <script src="./src/library.js?v=2"></script>
+  </body>
+</html>

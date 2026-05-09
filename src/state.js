@@ -1,4 +1,5 @@
-export function createSession(questionCount) {
+(function () {
+function createSession(questionCount) {
   return {
     currentQuestionIndex: 0,
     selectedSentenceIndex: null,
@@ -8,15 +9,15 @@ export function createSession(questionCount) {
   };
 }
 
-export function selectSentence(session, sentenceIndex) {
+function selectSentence(session, sentenceIndex) {
   session.selectedSentenceIndex = sentenceIndex;
 }
 
-export function clearSelection(session) {
+function clearSelection(session) {
   session.selectedSentenceIndex = null;
 }
 
-export function recordAnswer(session, question, isCorrect) {
+function recordAnswer(session, question, isCorrect) {
   session.answeredQuestionIds.add(question.id);
 
   if (isCorrect) {
@@ -26,7 +27,16 @@ export function recordAnswer(session, question, isCorrect) {
   }
 }
 
-export function moveToNextQuestion(session) {
+function moveToNextQuestion(session) {
   session.currentQuestionIndex = (session.currentQuestionIndex + 1) % session.questionCount;
   session.selectedSentenceIndex = null;
 }
+
+window.CARS_STATE = {
+  clearSelection,
+  createSession,
+  moveToNextQuestion,
+  recordAnswer,
+  selectSentence
+};
+})();

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Content | CARS Sentence Finder</title>
+    <link rel="stylesheet" href="./src/styles.css?v=6" />
+  </head>
+  <body>
+    <main class="site-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand" href="./index.html">Sentence Finder</a>
+        <div class="nav-links">
+          <a href="./library.html">Library</a>
+          <a href="./add.html" aria-current="page">Add Content</a>
+          <a href="./practice.html">Practice</a>
+        </div>
+      </nav>
+
+      <section class="page-heading">
+        <p class="eyebrow">Contribute a Passage</p>
+        <h1>Add Content</h1>
+        <p>Use the template to format original or properly licensed CARS-style passages and questions.</p>
+      </section>
+
+      <section class="content-workspace">
+        <article class="info-panel">
+          <h2>Template Workflow</h2>
+          <p>Download the JSON template, fill in the passage and question fields, then paste it here to preview whether the app can read it.</p>
+          <div class="stacked-actions">
+            <a class="primary-link" href="./templates/exercise-template.json" download>Download JSON Template</a>
+            <a class="secondary-link" href="./templates/llm-formatting-guide.txt" download>Download LLM Guide</a>
+          </div>
+        </article>
+
+        <article class="info-panel">
+          <h2>Paste Exercise JSON</h2>
+          <textarea id="exerciseInput" class="exercise-input" spellcheck="false" placeholder="Paste a completed exercise JSON object here."></textarea>
+          <div class="actions single-action">
+            <button id="previewExerciseButton" class="primary-button" type="button">Preview</button>
+          </div>
+          <div id="exercisePreview" class="template-preview" aria-live="polite"></div>
+        </article>
+      </section>
+    </main>
+
+    <script src="./src/add-content.js?v=2"></script>
+  </body>
+</html>

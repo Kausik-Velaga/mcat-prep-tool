@@ -1,4 +1,5 @@
-export function renderPassage(container, exercise, selectedSentenceIndex, answerSentenceIndex = null) {
+(function () {
+function renderPassage(container, exercise, selectedSentenceIndex, answerSentenceIndex = null) {
   const paragraphGroups = exercise.paragraphs ?? [exercise.sentences.map((_, index) => index)];
 
   container.replaceChildren(
@@ -30,12 +31,23 @@ export function renderPassage(container, exercise, selectedSentenceIndex, answer
   );
 }
 
-export function renderQuestion(elements, exercise, session) {
+function renderQuestion(elements, exercise, session) {
   const question = exercise.questions[session.currentQuestionIndex];
   const selectedSentence = exercise.sentences[session.selectedSentenceIndex];
+  const originalQuestionText = question.originalPrompt ?? question.stem ?? question.prompt;
+  const evidencePrompt = question.evidencePrompt ?? "Select the sentence in the passage that is most relevant to the original question.";
 
   elements.passageTitle.textContent = exercise.title;
-  elements.questionPrompt.textContent = question.prompt;
+  elements.originalQuestionText.textContent = originalQuestionText;
+  elements.answerChoices.replaceChildren(
+    ...(question.choices ?? []).map((choice) => {
+      const item = document.createElement("li");
+      item.textContent = choice;
+      return item;
+    })
+  );
+  elements.answerChoices.hidden = !question.choices?.length;
+  elements.questionPrompt.textContent = evidencePrompt;
   elements.questionType.textContent = question.type;
   elements.progressText.textContent = `Question ${session.currentQuestionIndex + 1} of ${exercise.questions.length}`;
   elements.scoreText.textContent = `${session.correctQuestionIds.size} correct`;
@@ -44,7 +56,7 @@ export function renderQuestion(elements, exercise, session) {
   elements.feedback.replaceChildren();
 }
 
-export function renderFeedback(container, result) {
+function renderFeedback(container, result) {
   const title = document.createElement("strong");
   title.textContent = result.isCorrect ? "Correct" : "Try that evidence again";
 
@@ -54,3 +66,10 @@ export function renderFeedback(container, result) {
   container.className = `feedback ${result.isCorrect ? "is-correct" : "is-incorrect"}`;
   container.replaceChildren(title, body);
 }
+
+window.CARS_RENDER = {
+  renderFeedback,
+  renderPassage,
+  renderQuestion
+};
+})();

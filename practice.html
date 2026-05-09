@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Practice | CARS Sentence Finder</title>
+    <link rel="stylesheet" href="./src/styles.css?v=6" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="site-nav compact-nav" aria-label="Primary navigation">
+        <a class="brand" href="./index.html">Sentence Finder</a>
+        <div class="nav-links">
+          <a href="./library.html">Library</a>
+          <a href="./add.html">Add Content</a>
+          <a href="./practice.html" aria-current="page">Practice</a>
+        </div>
+      </nav>
+
+      <section class="topbar" aria-label="Session overview">
+        <div>
+          <p class="eyebrow">MCAT CARS Drill</p>
+          <h1>Sentence Finder</h1>
+        </div>
+        <div class="session-stats" aria-live="polite">
+          <span id="progressText">Question 1 of 1</span>
+          <span id="scoreText">0 correct</span>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <article class="passage-panel" aria-labelledby="passageTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Passage</p>
+              <h2 id="passageTitle"></h2>
+            </div>
+            <button id="clearSelectionButton" class="icon-button" type="button" aria-label="Clear selected sentence" title="Clear selection">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div id="passageText" class="passage-text"></div>
+        </article>
+
+        <aside class="question-panel" aria-labelledby="questionTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Find the Evidence</p>
+              <h2 id="questionTitle">Question</h2>
+            </div>
+            <span id="questionType" class="pill"></span>
+          </div>
+
+          <section class="original-question" aria-labelledby="originalQuestionLabel">
+            <p id="originalQuestionLabel" class="selection-label">Original question</p>
+            <p id="originalQuestionText" class="original-question-text"></p>
+            <ol id="answerChoices" class="answer-choices" type="A"></ol>
+          </section>
+
+          <p class="selection-label evidence-label">Evidence task</p>
+          <p id="questionPrompt" class="question-prompt"></p>
+
+          <div class="selection-card">
+            <p class="selection-label">Selected sentence</p>
+            <p id="selectedSentence" class="selected-sentence">Click a sentence in the passage.</p>
+          </div>
+
+          <div id="feedback" class="feedback" aria-live="polite"></div>
+
+          <div class="actions">
+            <button id="checkButton" type="button" class="primary-button">Check</button>
+            <button id="nextButton" type="button" class="secondary-button">Next</button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="./data/exercise-store.js?v=4"></script>
+    <script src="./src/state.js?v=3"></script>
+    <script src="./src/render.js?v=5"></script>
+    <script src="./src/main.js?v=4"></script>
+  </body>
+</html>

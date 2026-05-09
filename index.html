@@ -4,61 +4,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CARS Sentence Finder</title>
-    <link rel="stylesheet" href="./src/styles.css?v=3" />
+    <link rel="stylesheet" href="./src/styles.css?v=6" />
   </head>
   <body>
-    <main class="app-shell">
-      <section class="topbar" aria-label="Session overview">
-        <div>
-          <p class="eyebrow">MCAT CARS Drill</p>
-          <h1>Sentence Finder</h1>
+    <main class="site-shell">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="brand" href="./index.html">Sentence Finder</a>
+        <div class="nav-links">
+          <a href="./library.html">Library</a>
+          <a href="./add.html">Add Content</a>
+          <a href="./practice.html">Practice</a>
         </div>
-        <div class="session-stats" aria-live="polite">
-          <span id="progressText">Question 1 of 1</span>
-          <span id="scoreText">0 correct</span>
+      </nav>
+
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">MCAT CARS Evidence Practice</p>
+          <h1>Train the missing step between reading and answering.</h1>
+          <p class="hero-text">
+            Instead of jumping straight to multiple choice, Sentence Finder asks learners to locate the exact sentence that answers the question.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-link" href="./practice.html">Start Practice</a>
+            <a class="secondary-link" href="./add.html">Add a Passage</a>
+          </div>
+        </div>
+
+        <div class="hero-preview" aria-label="Example drill preview">
+          <p class="preview-kicker">Find the evidence</p>
+          <p class="preview-question">Which sentence best states the central purpose of the CARS section?</p>
+          <div class="preview-passage">
+            <span>The primary purpose of the CARS section is to test your reading skills and ability to reason logically based on passage content.</span>
+            <span>CARS also tests whether you can apply what you learn from that content to external situations.</span>
+          </div>
         </div>
       </section>
 
-      <section class="workspace">
-        <article class="passage-panel" aria-labelledby="passageTitle">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Passage</p>
-              <h2 id="passageTitle"></h2>
-            </div>
-            <button id="clearSelectionButton" class="icon-button" type="button" aria-label="Clear selected sentence" title="Clear selection">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-          <div id="passageText" class="passage-text"></div>
+      <section class="feature-grid" aria-label="Core workflow">
+        <article>
+          <h2>Practice</h2>
+          <p>Students read normal paragraph text, then click the sentence that supports each question.</p>
         </article>
-
-        <aside class="question-panel" aria-labelledby="questionTitle">
-          <div class="panel-heading">
-            <div>
-              <p class="eyebrow">Find the Evidence</p>
-              <h2 id="questionTitle">Question</h2>
-            </div>
-            <span id="questionType" class="pill"></span>
-          </div>
-
-          <p id="questionPrompt" class="question-prompt"></p>
-
-          <div class="selection-card">
-            <p class="selection-label">Selected sentence</p>
-            <p id="selectedSentence" class="selected-sentence">Click a sentence in the passage.</p>
-          </div>
-
-          <div id="feedback" class="feedback" aria-live="polite"></div>
-
-          <div class="actions">
-            <button id="checkButton" type="button" class="primary-button">Check</button>
-            <button id="nextButton" type="button" class="secondary-button">Next</button>
-          </div>
-        </aside>
+        <article>
+          <h2>Contribute</h2>
+          <p>Authors can use a structured template to add original passages, questions, evidence, and explanations.</p>
+        </article>
+        <article>
+          <h2>Share</h2>
+          <p>The library page is ready for community exercise packs and can stay static while the project is small.</p>
+        </article>
       </section>
     </main>
-
-    <script src="./src/app.bundle.js?v=3"></script>
   </body>
 </html>

@@ -1,0 +1,34 @@
+{
+  "id": "unique-passage-id",
+  "title": "Passage Title",
+  "source": "Original, public domain, Creative Commons, or used with permission",
+  "paragraphs": [
+    [0, 1, 2],
+    [3, 4, 5]
+  ],
+  "sentences": [
+    "First sentence of the first paragraph.",
+    "Second sentence of the first paragraph.",
+    "Third sentence of the first paragraph.",
+    "First sentence of the second paragraph.",
+    "Second sentence of the second paragraph.",
+    "Third sentence of the second paragraph."
+  ],
+  "questions": [
+    {
+      "id": "question-1",
+      "type": "Foundations",
+      "originalPrompt": "Original multiple-choice question stem.",
+      "choices": [
+        "Choice A",
+        "Choice B",
+        "Choice C",
+        "Choice D"
+      ],
+      "correctChoiceIndex": 1,
+      "evidencePrompt": "Optional custom evidence task. Omit this field to use the default instruction.",
+      "answerSentenceIndex": 0,
+      "explanation": "Briefly explain why the evidence sentence answers the question."
+    }
+  ]
+}
