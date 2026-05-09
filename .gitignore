@@ -3,3 +3,6 @@
 node_modules/
 extracted/
 __pycache__/
+dist/
+.env
+.env.local
